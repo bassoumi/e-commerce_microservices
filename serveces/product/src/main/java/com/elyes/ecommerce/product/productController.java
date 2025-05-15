@@ -21,9 +21,12 @@ public class productController {
     }
 
     @PostMapping("/purchase")
-    public ResponseEntity<List<ProductPurchaseResponse>> purchaseProducts(@RequestBody List<ProductPurchaseResponse> request) {
+    public ResponseEntity<List<ProductPurchaseResponse>> purchaseProducts(
+            @RequestBody List<ProductPurchaseRequest> request
+    ) {
         return ResponseEntity.ok(service.purchaseProducts(request));
     }
+
 
     @GetMapping("/{product-id}")
     public ResponseEntity<ProductResponse> findById(

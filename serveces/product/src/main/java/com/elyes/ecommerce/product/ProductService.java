@@ -24,22 +24,22 @@ public class ProductService {
     }
 
     public List<ProductPurchaseResponse> purchaseProducts(List<ProductPurchaseRequest> request) {
-    var productIds = request.stream().map(ProductPurchaseRequest::productId).toList();
-    var storedProducts = repository.findAllByIdInOrderById(productIds);
-    if(productIds.size() != storedProducts.size()) {
+    var productIds = request.stream().map(ProductPurchaseRequest::productId).toList(); //return just the id
+    var storedProducts = repository.findAllByIdInOrderById(productIds); //from the product entity
+    if (productIds.size() != storedProducts.size()) {
         throw new ProductPurchaseException("Product not found");
       }
     var storesRequest = request
             .stream()
-            .sorted(Comparator.comparing(ProductPurchaseRequest::productId))
+            .sorted(Comparator.comparing(ProductPurchaseRequest::productId)) //return the hole products from the request without data base
             .toList();
 
     var purshasedProducts = new ArrayList<ProductPurchaseResponse>();
 
-    for (int i =0; i < storesRequest.size(); i++) {
+    for (int i = 0; i < storesRequest.size(); i++) {
         var product = storedProducts.get(i);
         var productRequest = storesRequest.get(i);
-        if (product.getAvailableQuantity() <productRequest.quantity()){
+        if (product.getAvailableQuantity() < productRequest.quantity()){
             throw new ProductPurchaseException("Insufficient quantity for product with id " + productRequest.productId());
         }
         var newAvailableQuantity = product.getAvailableQuantity() - productRequest.quantity();
