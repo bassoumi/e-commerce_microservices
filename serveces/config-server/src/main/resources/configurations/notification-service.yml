@@ -1,0 +1,39 @@
+spring:
+  data:
+    mongodb:
+      host: localhost
+      port: 27017
+      database: customer
+      authentication-database: admin
+
+  kafka:
+    consumer:
+      bootstrap-servers: localhost:9092
+      group-id: paymentGroup
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      properties:
+        spring.json.trusted.packages: '*'
+        spring.json.type.mapping: >
+          OrderConfirmation:com.elyes.ecommerce.kafka.OrderConfirmation,
+          PaymentConfirmation:com.elyes.ecommerce.kafka.payment.PaymentConfirmation
+
+  mail:
+    host: localhost
+    port: 1025
+    username: elyes
+    password: elyes
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+          trust: "*"
+          connectiontimeout: 5000
+          timeout: 3000
+          writetimeout: 5000
+
+server:
+  port: 8040

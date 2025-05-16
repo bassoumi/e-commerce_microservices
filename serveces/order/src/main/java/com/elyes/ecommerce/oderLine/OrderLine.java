@@ -1,7 +1,7 @@
 package com.elyes.ecommerce.oderLine;
 
 
-import com.elyes.ecommerce.oder.Order;
+import com.elyes.ecommerce.order.Order;
 import jakarta.persistence.*;
 import lombok.*;
 

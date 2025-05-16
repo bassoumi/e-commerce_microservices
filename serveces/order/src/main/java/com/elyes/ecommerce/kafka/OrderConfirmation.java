@@ -2,7 +2,7 @@ package com.elyes.ecommerce.kafka;
 
 
 import com.elyes.ecommerce.customer.CustomerResponse;
-import com.elyes.ecommerce.oder.PaymentMethod;
+import com.elyes.ecommerce.order.PaymentMethod;
 import com.elyes.ecommerce.product.PurchaseResponse;
 
 import java.math.BigDecimal;
