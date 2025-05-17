@@ -14,6 +14,7 @@ import com.elyes.ecommerce.product.PurchaseRequest;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -31,31 +32,15 @@ public class OrderService {
     private final OrderProducer orderProducer;
     private final PaymentClient paymentClient;
 
-
-    public Integer createOrder( OrderRequest request) {
-
+    @Transactional
+    public Integer createOrder(OrderRequest request) {
         var customer = this.customerClient.findCustomerById(request.customerId())
-                .orElseThrow(() -> new BuisnessException("cannot create order , no customer exsist with the provided id"+ request.customerId()));
+                .orElseThrow(() -> new BuisnessException("Cannot create order:: No customer exists with the provided ID"));
 
-       var purchaseProducts =  this.productClient.purchaseProducts(request.products());
+        var purchasedProducts = productClient.purchaseProducts(request.products());
 
-
-        var order = this.repository.save(mapper.toOrder(request));
-
-        for (PurchaseRequest purchaseRequest: request.products()){
-            orderLineService.saveOrderLine(
-                    new OrderLineRequest(
-                            null,
-                            order.getId(),
-                            purchaseRequest.productId(),
-                            purchaseRequest.quantity()
-
-                    )
-
-
-            );
-
-        }
+        var order = this.mapper.toOrderWithLines(request);
+        this.repository.save(order); // parent + children saved together
 
         var paymentRequest = new PaymentRequest(
                 request.amount(),
@@ -63,7 +48,6 @@ public class OrderService {
                 order.getId(),
                 order.getReference(),
                 customer
-
         );
         paymentClient.requestOrderPayment(paymentRequest);
 
@@ -73,31 +57,23 @@ public class OrderService {
                         request.amount(),
                         request.paymentMethod(),
                         customer,
-                        purchaseProducts
-
+                        purchasedProducts
                 )
         );
 
-
-
-        return  order.getId();
-
-
+        return order.getId();
     }
 
-    public List<OrderResponse> findAll() {
-        return  repository.findAll()
+    public List<OrderResponse> findAllOrders() {
+        return this.repository.findAll()
                 .stream()
-                .map(mapper::fromOrder)
+                .map(this.mapper::fromOrder)
                 .collect(Collectors.toList());
     }
 
-    public OrderResponse findById(Integer orderId) {
-        return repository.findById(orderId)
-                .map(mapper::fromOrder)
-                .orElseThrow(() -> new EntityNotFoundException(
-                        String.format("No order found with the provided ID %d", orderId)
-                ));
+    public OrderResponse findById(Integer id) {
+        return this.repository.findById(id)
+                .map(this.mapper::fromOrder)
+                .orElseThrow(() -> new EntityNotFoundException(String.format("No order found with the provided ID: %d", id)));
     }
-
 }

@@ -14,11 +14,11 @@ import org.springframework.stereotype.Service;
 @Log4j2
 public class NotificationProducer {
 
-    private final KafkaTemplate<String, PaymentNotifcationRequest> kafkaTemplate;
+    private final KafkaTemplate<String, PaymentNotificationRequest> kafkaTemplate;
 
-    public void send(PaymentNotifcationRequest request) {
+    public void send(PaymentNotificationRequest request) {
         log.info("Sending notification request: " + request);
-        Message<PaymentNotifcationRequest> message = MessageBuilder
+        Message<PaymentNotificationRequest> message = MessageBuilder
                 .withPayload(request)
                 .setHeader(KafkaHeaders.TOPIC, "notification")
                 .build();

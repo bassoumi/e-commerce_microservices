@@ -8,5 +8,4 @@ public record OrderResponse(
         BigDecimal amount,
         PaymentMethod paymentMethod,
         String customerId
-) {
-}
+) {}

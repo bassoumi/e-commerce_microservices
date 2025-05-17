@@ -2,7 +2,7 @@ package com.elyes.ecommerce.payment;
 
 
 import com.elyes.ecommerce.notification.NotificationProducer;
-import com.elyes.ecommerce.notification.PaymentNotifcationRequest;
+import com.elyes.ecommerce.notification.PaymentNotificationRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -18,7 +18,7 @@ public class PaymentService {
     public Integer createPayment(@Valid paymentRequest request) {
         var payment = repository.save(mapper.toPayment(request));
   notificationProducer.send(
-          new PaymentNotifcationRequest(
+          new PaymentNotificationRequest(
                   request.orderReference(),
                   request.amount(),
                   request.paymentMethod(),

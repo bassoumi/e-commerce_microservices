@@ -1,12 +1,11 @@
 package com.elyes.ecommerce.notification;
 
 
-import com.elyes.ecommerce.payment.Payment;
 import com.elyes.ecommerce.payment.PaymentMethod;
 
 import java.math.BigDecimal;
 
-public record PaymentNotifcationRequest(
+public record PaymentNotificationRequest(
         String orderReference,
         BigDecimal amount ,
         PaymentMethod paymentMethod,
