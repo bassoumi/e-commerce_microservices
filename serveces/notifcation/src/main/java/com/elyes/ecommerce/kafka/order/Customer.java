@@ -2,9 +2,9 @@ package com.elyes.ecommerce.kafka.order;
 
 public record Customer(
         String id,
-        String firstname,
+        String firstName,
 
-        String lastname,
+        String lastName,
 
         String email
 

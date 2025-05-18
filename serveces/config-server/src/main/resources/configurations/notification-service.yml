@@ -3,7 +3,7 @@ spring:
     mongodb:
       host: localhost
       port: 27017
-      database: customer
+      database: notification
       authentication-database: admin
 
   kafka:
@@ -12,12 +12,14 @@ spring:
       group-id: paymentGroup
       auto-offset-reset: earliest
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
       properties:
-        spring.json.trusted.packages: '*'
-        spring.json.type.mapping: >
-          OrderConfirmation:com.elyes.ecommerce.kafka.OrderConfirmation,
-          PaymentConfirmation:com.elyes.ecommerce.kafka.payment.PaymentConfirmation
+        # allow your domain classes to be deserialized
+        spring.json.trusted.packages: 'com.elyes.ecommerce.kafka.order,com.elyes.ecommerce.kafka.payment'
+
+        # must be under 'properties:' so Spring picks it up
+        # exactly one colon per entry, comma-separated, no trailing comma:
+        spring.json.type.mapping: "OrderConfirmation:com.elyes.ecommerce.kafka.order.OrderConfirmation,PaymentConfirmation:com.elyes.ecommerce.kafka.payment.PaymentConfirmation"
 
   mail:
     host: localhost
@@ -27,9 +29,9 @@ spring:
     properties:
       mail:
         smtp:
-          auth: true
+          auth: false
           starttls:
-            enable: true
+            enable: false
           trust: "*"
           connectiontimeout: 5000
           timeout: 3000

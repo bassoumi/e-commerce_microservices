@@ -30,11 +30,16 @@ public class EmailService {
 
     @Async
     public void sentPaymentSuccessEmail(
+
             String destination,
             String customerName,
             BigDecimal amount,
             String orderReference
+
     ) throws MessagingException {
+        log.info("Preparing to send email to: {}", destination);
+        log.info("Variables: customerName={}, amount={}, orderRef={}", customerName, amount, orderReference);
+
         MimeMessage mimeMessage = mailSender.createMimeMessage();
         MimeMessageHelper mimeMessageHelper = new MimeMessageHelper (
                 mimeMessage ,

@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 
+import static com.elyes.ecommerce.notification.NotificationType.ORDER_CONFIRMATION;
 import static java.lang.String.format;
 
 
@@ -45,18 +46,17 @@ public class NotificationConsumer {
     }
 
 
-    @KafkaListener(topics = "payment-topic")
-    public void onsumeOrderConfirmationNotifications(OrderConfirmation  orderConfirmation) throws MessagingException  {
-        log.info("order confirmation: {}", orderConfirmation);
-
+    @KafkaListener(topics = "order-topic")
+    public void consumeOrderConfirmationNotifications(OrderConfirmation orderConfirmation) throws MessagingException {
+        log.info(format("Consuming the message from order-topic Topic:: %s", orderConfirmation));
         repository.save(
                 Notification.builder()
-                        .type(NotificationType.ORDER_CONFIRMATION)
+                        .type(ORDER_CONFIRMATION)
                         .notificationDate(LocalDateTime.now())
                         .orderConfirmation(orderConfirmation)
                         .build()
         );
-        var customerName = orderConfirmation.customer().firstname() + " " + orderConfirmation.customer().lastname();
+        var customerName = orderConfirmation.customer().firstName() + " " + orderConfirmation.customer().lastName();
         emailService.sentorderConfirmationEmail(
                 orderConfirmation.customer().email(),
                 customerName,
@@ -64,8 +64,6 @@ public class NotificationConsumer {
                 orderConfirmation.orderReference(),
                 orderConfirmation.products()
         );
-
     }
-
 
 }

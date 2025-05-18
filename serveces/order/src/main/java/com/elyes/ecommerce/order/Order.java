@@ -42,12 +42,8 @@ public class Order {
     @Column(nullable = false)
     private String customerId;
 
-    @OneToMany(
-            mappedBy = "order",
-            cascade = CascadeType.PERSIST,
-            orphanRemoval = true
-    )
-    private List<OrderLine> orderLines = new ArrayList<>();
+    @OneToMany(mappedBy = "order")
+    private List<OrderLine> orderLines;
 
     @CreatedDate
     @Column(name = "created_at", nullable = false, updatable = false)

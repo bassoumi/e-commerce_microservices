@@ -11,12 +11,13 @@ import lombok.*;
 @Getter
 @Setter
 @Entity
+@Table(name = "customer_line")
 public class OrderLine {
     @Id
     @GeneratedValue
     private Integer id;
+    @ManyToOne
     @JoinColumn(name = "order_id")
-    @ManyToOne(cascade = CascadeType.PERSIST)
     private Order order;
 
     private Integer productId;

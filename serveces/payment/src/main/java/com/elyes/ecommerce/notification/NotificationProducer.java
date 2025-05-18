@@ -9,6 +9,8 @@ import org.springframework.messaging.Message;
 import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Service;
 
+import static org.springframework.kafka.support.KafkaHeaders.TOPIC;
+
 @Service
 @RequiredArgsConstructor
 @Log4j2
@@ -20,7 +22,7 @@ public class NotificationProducer {
         log.info("Sending notification request: " + request);
         Message<PaymentNotificationRequest> message = MessageBuilder
                 .withPayload(request)
-                .setHeader(KafkaHeaders.TOPIC, "notification")
+                .setHeader(TOPIC, "payment-topic")
                 .build();
         kafkaTemplate.send(message);
     }
