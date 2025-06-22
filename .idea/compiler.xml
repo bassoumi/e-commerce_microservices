@@ -11,7 +11,7 @@
         <module name="geteway" />
         <module name="discovery" />
       </profile>
-      <profile name="Annotation profile for product" enabled="true">
+      <profile name="Annotation profile for customer" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
@@ -21,8 +21,8 @@
         <module name="notifcation" />
         <module name="product" />
         <module name="payment" />
-        <module name="order" />
         <module name="customer" />
+        <module name="order" />
       </profile>
     </annotationProcessing>
   </component>

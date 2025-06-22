@@ -1,6 +1,7 @@
 package com.elyes.ecommerce.customer;
 
 
+import org.mapstruct.MappingTarget;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -27,4 +28,5 @@ public class CustomerMapper {
 
         );
     }
+
 }
